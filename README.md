@@ -115,4 +115,16 @@ const form = new FormGroup({
   // all form controls...
 },
     { validators: myCustomValidator }
-);```
+);
+```
+
+--------------------------------------------
+### Set/Patch Value
+```
+ - setValue: generates an error, since "street" and "isAbroad" fields are missing
+addressForm.setValue(newAddress);
+
+ - patchValue: allows partial updates without erorrs
+addressForm.patchValue(newAddress);
+```
+-------
