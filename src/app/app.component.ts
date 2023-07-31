@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, NonNullableFormBuilder, Validators, FormArray } from '@angular/forms';
 import { RegistrationForm } from './model/registration.model';
 
 @Component({
@@ -8,36 +8,55 @@ import { RegistrationForm } from './model/registration.model';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Angular Reactive Forms';
+  title = 'Angular Conference';
   registerSuccess = false;
-
-  readonly usernameMinLength = 5;
 
   registrationForm!: FormGroup<RegistrationForm>;
 
-  get username() {
-    return this.registrationForm.get('username');
+  get name() {
+    return this.registrationForm.get('name');
+  }
+
+  get companyName() {
+    return this.registrationForm.get('companyName');
+  }
+
+  get participants() {
+    return this.registrationForm.get('participants') as FormArray;
   }
 
   constructor(private fb: NonNullableFormBuilder) { }
 
   ngOnInit(): void {
     this.registrationForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(this.usernameMinLength)]],
-      email: ['', [Validators.required, Validators.email]]
+      name: ['', Validators.required],
+      companyName: ['', Validators.required],
+      jobTitle: [''],
+      participants: this.fb.array([])
     });
   }
 
-  resetForm() {
-    this.registrationForm.reset();
-    this.username?.setErrors(null);
-    this.registerSuccess = false;
+  newParticipant(): FormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      companyName: ['', Validators.required],
+      jobTitle: ['']
+    });
+  }
+
+  addParticipant(): void {
+    const participant = this.newParticipant();
+    this.participants.push(participant);
+  }
+
+  removeParticipan(i: number) {
+    this.participants.removeAt(i);
   }
 
   register() {
     if (this.registrationForm.valid) {
       this.registerSuccess = true;
-      console.log(this, this.registrationForm.value);
+      console.log(this.registrationForm.value);
     }
   }
 }

@@ -1,6 +1,8 @@
-import { FormControl } from "@angular/forms";
+import { FormControl, FormArray } from "@angular/forms";
 
 export interface RegistrationForm {
-    username: FormControl<string>;
-    email: FormControl<string>;
+    name: FormControl<string>;
+    jobTitle: FormControl<string>;
+    companyName: FormControl<string>;
+    participants: FormArray;
 }
