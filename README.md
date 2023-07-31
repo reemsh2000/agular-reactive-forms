@@ -70,12 +70,12 @@ ratingFormControl = new FormControl(0, [rating()]);
 
 - touched/untouched: When the user sets the focus on a form control, such as clicking on an input field or using the tab key, the touched property is set to true and the untouched to false.
 
-- dirty/pristine: This provides the information on whether the form control’s value has been modified or not. If we change the control’s value and then restore it to its original value, the dirty property will still be true.
+- dirty/pristine: This provides information on whether the form control’s value has been modified or not. If we change the control’s value and then restore it to its original value, the dirty property will still be true.
 
 - valid/invalid: When a control passes all validation checks according to its validators, or if no validators are assigned, the valid property is set to true.
 -----------------------------
 ### Custom Validators
-In its simplest form, a custom validator is a function that returns null if everything is fine or an ValidationErrors object type if the validation found any error.
+In its simplest form, a custom validator is a function that returns null if everything is fine or a ValidationErrors object type if the validation found any error.
 
 ```
 import { AbstractControl } from '@angular/forms';
@@ -98,7 +98,7 @@ import { minAgeValidator } from './min-age-validator';
         username = this.fb.control('', Validators.required),
         age = this.fb.control('', minAgeValidator)
     });
-in html 
+in HTML 
 
   <mat-error *ngIf="age?.hasError('invalidAge')">
     {{ "You must be older than " + minAge + " yo to register." }}
@@ -124,7 +124,8 @@ const form = new FormGroup({
  - setValue: generates an error, since "street" and "isAbroad" fields are missing
 addressForm.setValue(newAddress);
 
- - patchValue: allows partial updates without erorrs
+ - patchValue: allows partial updates without errors
 addressForm.patchValue(newAddress);
 ```
 -------
+Every branch on this repo contains a lot of information, and You can check it!
