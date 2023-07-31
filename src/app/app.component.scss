@@ -1,3 +1,31 @@
-.submit-btn {
-  margin-right: 1.5rem;
+.full-width {
+  width: 100%;
+}
+
+.width-80 {
+  width: 80%;
+}
+
+form {
+  margin: 0 auto;
+  min-width: 600px;
+
+  .add-button {
+    margin-top: 1.5rem;
+  }
+
+  .participants-group {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+
+    .participant-action {
+      margin-left: auto;
+    }
+  }
+
+  .form-buttons {
+    margin-top: 3rem;
+    margin-left: auto;
+  }
 }
