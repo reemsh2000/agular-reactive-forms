@@ -1,43 +1,41 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
-import { RegistrationForm } from './model/registration.model';
+import { Component } from '@angular/core';
+import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { UserService } from './user.service';
+import { UserValidator } from './validators/user-validator';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  title = 'Angular Reactive Forms';
+export class AppComponent {
+  title = 'Async validation';
+
   registerSuccess = false;
 
-  readonly usernameMinLength = 5;
-
-  registrationForm!: FormGroup<RegistrationForm>;
-
   get username() {
-    return this.registrationForm.get('username');
+    return this.registerForm.get('username');
   }
-
-  constructor(private fb: NonNullableFormBuilder) { }
-
-  ngOnInit(): void {
-    this.registrationForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(this.usernameMinLength)]],
-      email: ['', [Validators.required, Validators.email]]
-    });
+  get pwd() {
+    return this.registerForm.get('pwd');
   }
+  constructor(private fb: NonNullableFormBuilder, private userService: UserService) { }
 
-  resetForm() {
-    this.registrationForm.reset();
-    this.username?.setErrors(null);
-    this.registerSuccess = false;
-  }
+  registerForm = this.fb.group({
+    name: [''],
+    username: [
+      '',
+      [Validators.required, Validators.minLength(3)],
+      [UserValidator.usernameValidator(this.userService)],
+    ],
+    pwd: ['', [Validators.required]],
+    terms: [false, [Validators.requiredTrue]],
+  });
 
   register() {
-    if (this.registrationForm.valid) {
+    this.registerForm.markAllAsTouched();
+    if (this.registerForm.valid) {
       this.registerSuccess = true;
-      console.log(this, this.registrationForm.value);
     }
   }
 }
