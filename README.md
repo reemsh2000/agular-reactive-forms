@@ -106,6 +106,13 @@ in html
 ```
 -------------------------------------------------------
 
+### Cross-reference validation
+ allows gathering the controls’ values across the form and combining them in a single custom validator.
 
-
-
+To consider multiple fields at once, we need to apply the custom validator to the parent control, which is the FormGroup
+```
+const form = new FormGroup({
+  // all form controls...
+},
+    { validators: myCustomValidator }
+);```
