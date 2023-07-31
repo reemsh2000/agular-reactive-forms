@@ -1,6 +1,8 @@
 import { FormControl } from "@angular/forms";
 
 export interface RegistrationForm {
-    username: FormControl<string>;
-    email: FormControl<string>;
+    name: FormControl<string>;
+    address: FormControl<string>;
+    isAbroad: FormControl<boolean>;
+    userProfile: FormControl<string>;
 }
