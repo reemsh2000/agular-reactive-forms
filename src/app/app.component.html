@@ -15,7 +15,6 @@
   <a routerLink="cross">
     <img width="40" id="angularLogo" alt="Angular Logo"
       src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==" />
-
   </a>
   <span class="header-title">Reactive Forms Workspace</span>
   <div class="spacer"></div>
@@ -23,32 +22,38 @@
 
 <div class="page">
   <div class="content" role="main">
-    <form (ngSubmit)="register()" [formGroup]="registrationForm" autocomplete="off">
+
+    <form (ngSubmit)="shipOrder()" [formGroup]="packageOrderForm" autocomplete="off">
       <mat-form-field class="full-width">
-        <mat-label>Username</mat-label>
-        <input matInput placeholder="Username" formControlName="username" />
-        <mat-error *ngIf="username?.hasError('required')">
-          {{ "Field required!" }}
-        </mat-error>
-        <mat-error *ngIf="username?.hasError('minlength')">
-          {{ "Username must be at least "+ usernameMinLength +" characters!" }}
-        </mat-error>
+        <mat-label>Customer name</mat-label>
+        <input matInput formControlName="customerName" />
+        <mat-error *ngIf="customerName?.hasError('required')">
+          {{ "Field required!" }}</mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" />
+        <mat-label>Qty (kg)</mat-label>
+        <input matInput type="number" min="1" formControlName="qty" />
+        <mat-error *ngIf="qty?.hasError('required')">{{ "Field required!" }}</mat-error>
+        <mat-error *ngIf="qty?.hasError('min')">{{ "Wrong quantity!" }}</mat-error>
       </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Select a package</mat-label>
+        <mat-select formControlName="packageType">
+          <mat-option *ngFor="let package of packages" [value]="package.value">
+            {{ package.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-error *ngIf="packageOrderForm?.hasError('invalidPackage')">
+        {{ "The order quantity does not match the selected package!" }}
+      </mat-error>
       <div class="form-buttons">
-        <button type="submit" mat-raised-button class="submit-btn" color="primary"
-          [disabled]="!registrationForm.valid||!registrationForm.dirty">
-          Register
+        <button mat-raised-button color="primary" type="submit" [disabled]="!packageOrderForm.valid">
+          Order!
         </button>
-        <button type="button" mat-raised-button (click)="resetForm()">
-          Reset form
-        </button>
-        <div class="submit-success" *ngIf="registerSuccess">
-          Form submitted successfully!
-        </div>
+      </div>
+      <div class="submit-success" *ngIf="submitted">
+        Order submitted successfully!
       </div>
     </form>
   </div>
