@@ -1,27 +1,75 @@
-# ReactiveForms
+# Agular Reactive Forms
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
+### Two Types of Angular forms
+- Reactive ( formGroup,formControl )
+- Template-driven ( ngModel )
+----
 
-## Development server
+### Building blocks
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+* FormControl: This is the base element. It allows managing the value and the status of an individual form control, like an input field, a drop-down, or a check box.
 
-## Code scaffolding
+    const firstname = new FormControl('Francesco');
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- FormGroup: This aggregates multiple controls (FormControls, FormArrays, or even other FormGroup instances) into a single object. Its status is given by the sum of the statuses of all its child items.
+```
+const homeAddressForm = new FormGroup({
+street: new FormControl(''),
+city: new FormControl('', Validators.required)
+});
+ --------------
+const addresses= new FormArray([
+homeAddress: new FormGroup({...}),
+workAddress: new FormGroup({...}),
+ ]);
+```
+----------
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### The nonNullable and NonNullableFormBuilder properties 
+If we have form controls whose value should not be nullable, we have a few different options:
 
-## Running unit tests
+Setting the nonNullable property to true in the FormControl constructor.
+```
+const username = new FormControl('my_username', {nonNullable: true});
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+console.log(username.value); // Output: my_username
+username.reset();
+console.log(username.value); // Output: my_username, since it cannot be null
+----------------
+constructor(private fb: FormBuilder) {}
 
-## Running end-to-end tests
+  const registrationForm = this.fb.nonNullable.group({
+    username: '',
+    email: ''
+  });
+--------------
+constructor(private nnfb: NonNullableFormBuilder) {}
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+ngOnInit() {
+  const registrationForm = this.nnfb.group({
+    username: '',
+    email: ''
+});
+}
+```
+--------
 
-## Further help
+Compose :
+```  
+readonly rating = Validators.compose([
+Validators.min(0),
+Validators.max(5)
+]);```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+ratingFormControl = new FormControl(0, [rating()]);
+
+```
+--------
+### Controls state
+
+- touched/untouched: When the user sets the focus on a form control, such as clicking on an input field or using the tab key, the touched property is set to true and the untouched to false.
+
+- dirty/pristine: This provides the information on whether the form control’s value has been modified or not. If we change the control’s value and then restore it to its original value, the dirty property will still be true.
+
+- valid/invalid: When a control passes all validation checks according to its validators, or if no validators are assigned, the valid property is set to true.
