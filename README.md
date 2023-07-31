@@ -73,3 +73,39 @@ ratingFormControl = new FormControl(0, [rating()]);
 - dirty/pristine: This provides the information on whether the form control’s value has been modified or not. If we change the control’s value and then restore it to its original value, the dirty property will still be true.
 
 - valid/invalid: When a control passes all validation checks according to its validators, or if no validators are assigned, the valid property is set to true.
+-----------------------------
+### Custom Validators
+In its simplest form, a custom validator is a function that returns null if everything is fine or an ValidationErrors object type if the validation found any error.
+
+```
+import { AbstractControl } from '@angular/forms';
+
+export function onlyPositiveNumbers(control: AbstractControl): export function minAgeValidator(control:AbstractControl) : ValidationErrors | null {
+
+    const minAcceptedAge = 18;
+    const userAge = control.value;
+
+    if (userAge && (userAge < minAcceptedAge || isNaN(userAge))) {
+        return { 'invalidAge': true };
+    }
+
+    return null;        
+}
+--------------------------------------------------------------
+import { minAgeValidator } from './min-age-validator';
+
+  const registrationForm = this.fb.group({
+        username = this.fb.control('', Validators.required),
+        age = this.fb.control('', minAgeValidator)
+    });
+in html 
+
+  <mat-error *ngIf="age?.hasError('invalidAge')">
+    {{ "You must be older than " + minAge + " yo to register." }}
+  </mat-error>
+```
+-------------------------------------------------------
+
+
+
+
